@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -12,14 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//    FIXME: не происходит автосвязывания mockMvc и objectMapper => не могу проверить внутренние тесты.
-
 @RestController
 @RequestMapping("/films")
 @Slf4j
 public class FilmController {
 
-    private final Map<Integer, Film> films = new HashMap<>();
+    @Getter
+    private static final Map<Integer, Film> films = new HashMap<>();
 
     @GetMapping
     public List<Film> getAllFilms() {

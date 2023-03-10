@@ -2,12 +2,11 @@ package ru.yandex.practicum.filmorate.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -28,10 +27,15 @@ public class UserControllerTests {
     @Autowired
     ObjectMapper objectMapper;
 
+    @BeforeEach
+    void setUp() {
+        UserController.getUsers().clear();
+    }
+
     @SneakyThrows
     @Test
     void createUser() {
-        User user = new User("mail@mail.ru", "Login", "Name", LocalDate.of(1990, 3, 9));
+        User user = new User("user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9));
         String response = mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
@@ -39,7 +43,7 @@ public class UserControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
+        user.setId(1);
         System.out.println(objectMapper.writeValueAsString(user));
         System.out.println(response);
         assertEquals(objectMapper.writeValueAsString(user), response);
@@ -48,9 +52,9 @@ public class UserControllerTests {
     @SneakyThrows
     @Test
     void updateUser() {
-        User user = new User("user@mail.ru", "almariel1", "Anna", LocalDate.of(1990, 3, 9));
+        User user = new User("user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9));
 
-        String response = mockMvc.perform(post("/users")
+        mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
@@ -59,6 +63,7 @@ public class UserControllerTests {
                 .getContentAsString();
 
         user.setName("Updated user Name");
+        user.setId(1);
         String response2 = mockMvc.perform(put("/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
@@ -69,18 +74,19 @@ public class UserControllerTests {
 
 
         System.out.println(objectMapper.writeValueAsString(user));
-        System.out.println(response);
-        assertEquals(objectMapper.writeValueAsString(user), response);
+        System.out.println(response2);
+        assertEquals(objectMapper.writeValueAsString(user), response2);
     }
 
     @SneakyThrows
     @Test
     void emailShouldMatchPattern() {
         User user = new User("qwe", "almariel1", "Anna", LocalDate.of(1990, 3, 9));
+
         String response = mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -96,7 +102,7 @@ public class UserControllerTests {
         String response = mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -107,7 +113,7 @@ public class UserControllerTests {
 
     @SneakyThrows
     @Test
-    void loginCantBeBlank() {
+    void emailMustBeUnique() {
         User user = new User("user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9));
         User user2 = new User("user@mail.ru", "kristina", "Kristina", LocalDate.of(2021, 7, 23));
         String response = mockMvc.perform(post("/users")
@@ -121,13 +127,14 @@ public class UserControllerTests {
         String response2 = mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user2)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
         System.out.println(objectMapper.writeValueAsString(user));
         System.out.println(response);
+        System.out.println(response2);
     }
 
     @SneakyThrows
@@ -137,7 +144,7 @@ public class UserControllerTests {
         String response = mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -148,12 +155,12 @@ public class UserControllerTests {
 
     @SneakyThrows
     @Test
-    void loginCantBeBlanc() {
+    void loginCantBeBlank() {
         User user = new User("user@mail.ru", "", "Anna", LocalDate.of(1990, 3, 9));
         String response = mockMvc.perform(post("/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();

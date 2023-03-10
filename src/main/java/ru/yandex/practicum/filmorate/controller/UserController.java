@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -13,7 +14,9 @@ import java.util.*;
 @Slf4j
 public class UserController {
 
-    private final Map<Integer, User> users = new HashMap<>();
+    @Getter
+//    static добавлен для тестов для обнуления поля @BeforeEach
+    private static final Map<Integer, User> users = new HashMap<>();
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -22,11 +25,19 @@ public class UserController {
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
+        if (!user.getEmail().matches(".+[@].+[.].+")) {
+            throw new ValidationException("Неправильный формат e-mail");
+        }
         if (user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может содержать пробелы");
         }
         if (user.getName() == null) {
             user.setName(user.getLogin());
+        }
+        for (User user1 : users.values()) {
+            if (user1.getEmail().equals(user.getEmail())) {
+                throw new ValidationException("E-mail должен быть уникальным");
+            }
         }
         user.setId(users.size() + 1);
         users.put(user.getId(), user);

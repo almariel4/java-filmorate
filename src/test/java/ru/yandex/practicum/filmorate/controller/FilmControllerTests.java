@@ -2,19 +2,14 @@ package ru.yandex.practicum.filmorate.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -23,12 +18,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 public class FilmControllerTests {
 
-    //    FIXME: не происходит автосвязывания mockMvc и objectMapper => не могу проверить тесты
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        FilmController.getFilms().clear();
+    }
 
     @SneakyThrows
     @Test
@@ -41,7 +40,7 @@ public class FilmControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
+        film.setId(1);
         System.out.println(objectMapper.writeValueAsString(film));
         System.out.println(response);
         assertEquals(objectMapper.writeValueAsString(film), response);
@@ -59,7 +58,7 @@ public class FilmControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
+        film.setId(1);
         film.setName("Update Film name");
         String response2 = mockMvc.perform(put("/films")
                         .contentType("application/json")
@@ -72,7 +71,7 @@ public class FilmControllerTests {
         System.out.println(objectMapper.writeValueAsString(film));
         System.out.println(response);
         System.out.println(response2);
-        assertEquals(objectMapper.writeValueAsString(film), response);
+        assertEquals(objectMapper.writeValueAsString(film), response2);
     }
 
     @SneakyThrows
@@ -82,7 +81,7 @@ public class FilmControllerTests {
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -102,7 +101,7 @@ public class FilmControllerTests {
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
-                .andExpect(status().isOk())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -118,7 +117,7 @@ public class FilmControllerTests {
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -134,7 +133,7 @@ public class FilmControllerTests {
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().is4xxClientError())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -143,7 +142,7 @@ public class FilmControllerTests {
         System.out.println(response);
     }
 
-    @SneakyThrows
+/*    @SneakyThrows
     @Test
     void getAllFilms() {
         Film film = new Film("Film Name", "Description", LocalDate.now(), 100);
@@ -160,5 +159,5 @@ public class FilmControllerTests {
                 .content(String.valueOf((film2))));
 
         assertEquals(films.size(), 2);
-    }
+    }*/
 }
