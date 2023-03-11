@@ -61,9 +61,7 @@ class FilmDbStorageTest {
                                 .hasFieldOrPropertyWithValue("name", "Марлоу")
                                 .hasFieldOrPropertyWithValue("description", "Каждая тайна должна иметь свою звезду на Аллее славы")
                                 .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(2023, 2, 23))
-                                .hasFieldOrPropertyWithValue("duration", 109)
-                )
-        ;
+                                .hasFieldOrPropertyWithValue("duration", 109));
     }
 
     @Test
@@ -97,7 +95,7 @@ class FilmDbStorageTest {
     @Test
     void getFilm() {
         Film film = new Film(0L, "Марлоу", "Каждая тайна должна иметь свою звезду на Аллее славы", List.of(new Genre(4, "Триллер")), LocalDate.of(2023, 2, 23), 109, new Mpa(3, "PG-13"), new HashSet<>());
-        film = filmDbStorage.createFilm(film);
+        filmDbStorage.createFilm(film);
         Optional<Film> filmOptional = Optional.ofNullable(filmDbStorage.getFilm(1L));
 
         assertThat(filmOptional)
@@ -187,4 +185,6 @@ class FilmDbStorageTest {
         assertThat(filmDbStorage.getLikes(film.getId()))
                 .hasSize(0);
     }
+
+
 }
