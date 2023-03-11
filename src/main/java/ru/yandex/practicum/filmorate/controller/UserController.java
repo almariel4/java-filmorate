@@ -25,19 +25,11 @@ public class UserController {
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-        if (!user.getEmail().matches(".+[@].+[.].+")) {
-            throw new ValidationException("Неправильный формат e-mail");
-        }
         if (user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может содержать пробелы");
         }
         if (user.getName() == null) {
             user.setName(user.getLogin());
-        }
-        for (User user1 : users.values()) {
-            if (user1.getEmail().equals(user.getEmail())) {
-                throw new ValidationException("E-mail должен быть уникальным");
-            }
         }
         user.setId(users.size() + 1);
         users.put(user.getId(), user);

@@ -10,6 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,7 +34,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void createFilm() {
-        Film film = new Film("Film name", "Description", LocalDate.now(), 120);
+        Film film = new Film(0, "Film name", "Description", LocalDate.now(), 120);
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
@@ -49,7 +51,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void updateFilm() {
-        Film film = new Film("Film name", "Description", LocalDate.now(), 120);
+        Film film = new Film(0, "Film name", "Description", LocalDate.now(), 120);
 
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
@@ -77,7 +79,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void filmNameCantBeBlank() {
-        Film film = new Film(" ", "Description", LocalDate.now(), 120);
+        Film film = new Film(0, " ", "Description", LocalDate.now(), 120);
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
@@ -93,7 +95,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void filmDescriptionMustBeLessThen200() {
-        Film film = new Film("Film name",
+        Film film = new Film(0, "Film name",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                 LocalDate.now(), 120);
         film.setName("Update Film name");
@@ -113,7 +115,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void filmDurationMustBeMoreThanZero() {
-        Film film = new Film("Film Name", "Description", LocalDate.now(), -10);
+        Film film = new Film(0, "Film Name", "Description", LocalDate.now(), -10);
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
@@ -129,7 +131,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void filmDateMustBeLaterThan28_12_1895() {
-        Film film = new Film("Film Name", "Description", LocalDate.of(1860, 12, 28), 120);
+        Film film = new Film(0, "Film Name", "Description", LocalDate.of(1860, 12, 28), 120);
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
@@ -142,11 +144,11 @@ public class FilmControllerTests {
         System.out.println(response);
     }
 
-/*    @SneakyThrows
+    @SneakyThrows
     @Test
     void getAllFilms() {
-        Film film = new Film("Film Name", "Description", LocalDate.now(), 100);
-        Film film2 = new Film("Film Name", "Description", LocalDate.now(), 110);
+        Film film = new Film(0, "Film Name", "Description", LocalDate.now(), 100);
+        Film film2 = new Film(0, "Film Name", "Description", LocalDate.now(), 110);
         List<Film> films = new ArrayList<>();
         films.add(film);
         films.add(film2);
@@ -159,5 +161,5 @@ public class FilmControllerTests {
                 .content(String.valueOf((film2))));
 
         assertEquals(films.size(), 2);
-    }*/
+    }
 }
