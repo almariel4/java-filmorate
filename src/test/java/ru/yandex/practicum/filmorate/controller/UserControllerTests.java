@@ -29,7 +29,7 @@ public class UserControllerTests {
 
     @BeforeEach
     void setUp() {
-        UserController.getUsers().clear();
+        .getUsers().clear();
     }
 
     @SneakyThrows
