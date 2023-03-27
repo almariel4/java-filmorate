@@ -8,14 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
 public class FilmControllerTests {
@@ -26,15 +29,18 @@ public class FilmControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private FilmStorage filmStorage;
+
     @BeforeEach
     void setUp() {
-        FilmController.getFilms().clear();
+        filmStorage.getFilms().clear();
     }
 
     @SneakyThrows
     @Test
     void createFilm() {
-        Film film = new Film(0, "Film name", "Description", LocalDate.now(), 120);
+        Film film = new Film(0L, "Film name", "Description", LocalDate.now(), 120, new HashSet<>());
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
@@ -42,7 +48,7 @@ public class FilmControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        film.setId(1);
+        film.setId(1L);
         System.out.println(objectMapper.writeValueAsString(film));
         System.out.println(response);
         assertEquals(objectMapper.writeValueAsString(film), response);
@@ -51,7 +57,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void updateFilm() {
-        Film film = new Film(0, "Film name", "Description", LocalDate.now(), 120);
+        Film film = new Film(0L, "Film name", "Description", LocalDate.now(), 120, new HashSet<>());
 
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
@@ -60,7 +66,7 @@ public class FilmControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        film.setId(1);
+        film.setId(1L);
         film.setName("Update Film name");
         String response2 = mockMvc.perform(put("/films")
                         .contentType("application/json")
@@ -79,7 +85,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void filmNameCantBeBlank() {
-        Film film = new Film(0, " ", "Description", LocalDate.now(), 120);
+        Film film = new Film(0L, " ", "Description", LocalDate.now(), 120, new HashSet<>());
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
@@ -95,9 +101,9 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void filmDescriptionMustBeLessThen200() {
-        Film film = new Film(0, "Film name",
+        Film film = new Film(0L, "Film name",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                LocalDate.now(), 120);
+                LocalDate.now(), 120, new HashSet<>());
         film.setName("Update Film name");
 
         String response = mockMvc.perform(post("/films")
@@ -115,7 +121,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void filmDurationMustBeMoreThanZero() {
-        Film film = new Film(0, "Film Name", "Description", LocalDate.now(), -10);
+        Film film = new Film(0L, "Film Name", "Description", LocalDate.now(), -10, new HashSet<>());
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
@@ -131,7 +137,7 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void filmDateMustBeLaterThan28_12_1895() {
-        Film film = new Film(0, "Film Name", "Description", LocalDate.of(1860, 12, 28), 120);
+        Film film = new Film(0L, "Film Name", "Description", LocalDate.of(1860, 12, 28), 120, new HashSet<>());
         String response = mockMvc.perform(post("/films")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(film)))
@@ -147,8 +153,8 @@ public class FilmControllerTests {
     @SneakyThrows
     @Test
     void getAllFilms() {
-        Film film = new Film(0, "Film Name", "Description", LocalDate.now(), 100);
-        Film film2 = new Film(0, "Film Name", "Description", LocalDate.now(), 110);
+        Film film = new Film(0L, "Film Name", "Description", LocalDate.now(), 100, new HashSet<>());
+        Film film2 = new Film(0L, "Film Name", "Description", LocalDate.now(), 110, new HashSet<>());
         List<Film> films = new ArrayList<>();
         films.add(film);
         films.add(film2);

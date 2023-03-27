@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
@@ -18,16 +16,23 @@ import java.util.Map;
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
+    private final Map<Long, User> users = new HashMap<>();
+    private Long id = 0L;
 
-    @Getter
-    private final Map<Integer, User> users = new HashMap<>();
+    private Long generateId() {
+        return ++id;
+    }
+
+    @Override
+    public Map<Long, User> getUsers() {
+        return users;
+    }
 
     public List<User> getAllUsers() {
         return new ArrayList<>(users.values());
     }
 
-    public User getUser(int userId) {
-//            FIXME: тесты Postman выдают ошибку 500, хотя хендлер обрабатывает верно
+    public User getUser(Long userId) {
         if (!users.containsKey(userId)) {
             throw new UserNotFoundException("Пользователь с " + userId + "не найден");
         }
@@ -41,7 +46,7 @@ public class InMemoryUserStorage implements UserStorage {
         if (user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
-        user.setId(users.size() + 1);
+        user.setId(generateId());
         users.put(user.getId(), user);
         log.info("Добавлен пользователь id='{}', name='{}'", user.getId(), user.getName());
         return user;
