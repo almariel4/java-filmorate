@@ -28,6 +28,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public void resetId() {
         id = 0L;
     }
+
     @Override
     public Map<Long, Film> getFilms() {
         return films;
