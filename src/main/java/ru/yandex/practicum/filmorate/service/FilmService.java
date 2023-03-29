@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class FilmService {
 
     private final FilmStorage filmStorage;
@@ -46,11 +48,11 @@ public class FilmService {
                 .sorted((f0, f1) -> compare(f0, f1))
                 .limit(Objects.requireNonNullElse(count, 10L))
                 .collect(Collectors.toList());
-        System.out.println(collection);
+        log.debug(collection.toString());
         return collection;
     }
 
-    public int compare(Film f0, Film f1) {
+    private int compare(Film f0, Film f1) {
         return f1.getLikes().size() - (f0.getLikes().size());
     }
 }

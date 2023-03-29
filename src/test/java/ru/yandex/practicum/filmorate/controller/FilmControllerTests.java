@@ -5,7 +5,8 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
@@ -20,12 +21,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 public class FilmControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
+    // без @WebMvcTest не находятся бины для objectMapper
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -35,6 +38,7 @@ public class FilmControllerTests {
     @BeforeEach
     void setUp() {
         filmStorage.getFilms().clear();
+        filmStorage.resetId();
     }
 
     @SneakyThrows
@@ -49,8 +53,6 @@ public class FilmControllerTests {
                 .getResponse()
                 .getContentAsString();
         film.setId(1L);
-        System.out.println(objectMapper.writeValueAsString(film));
-        System.out.println(response);
         assertEquals(objectMapper.writeValueAsString(film), response);
     }
 
@@ -76,9 +78,6 @@ public class FilmControllerTests {
                 .getResponse()
                 .getContentAsString();
 
-        System.out.println(objectMapper.writeValueAsString(film));
-        System.out.println(response);
-        System.out.println(response2);
         assertEquals(objectMapper.writeValueAsString(film), response2);
     }
 
@@ -93,9 +92,6 @@ public class FilmControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        System.out.println(objectMapper.writeValueAsString(film));
-        System.out.println(response);
     }
 
     @SneakyThrows
@@ -113,9 +109,6 @@ public class FilmControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        System.out.println(objectMapper.writeValueAsString(film));
-        System.out.println(response);
     }
 
     @SneakyThrows
@@ -129,9 +122,6 @@ public class FilmControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        System.out.println(objectMapper.writeValueAsString(film));
-        System.out.println(response);
     }
 
     @SneakyThrows
@@ -145,9 +135,6 @@ public class FilmControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        System.out.println(objectMapper.writeValueAsString(film));
-        System.out.println(response);
     }
 
     @SneakyThrows

@@ -23,6 +23,12 @@ public class InMemoryUserStorage implements UserStorage {
         return ++id;
     }
 
+    // Для внутренних тестов
+    @Override
+    public void resetId() {
+        id = 0L;
+    }
+
     @Override
     public Map<Long, User> getUsers() {
         return users;

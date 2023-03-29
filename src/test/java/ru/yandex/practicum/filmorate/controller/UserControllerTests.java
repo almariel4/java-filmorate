@@ -5,7 +5,8 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -20,12 +21,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = UserController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class UserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
+    // без @WebMvcTest не находятся бины для objectMapper
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -35,6 +38,7 @@ public class UserControllerTests {
     @BeforeEach
     void setUp() {
         userStorage.getUsers().clear();
+        userStorage.resetId();
     }
 
     @SneakyThrows
@@ -49,8 +53,6 @@ public class UserControllerTests {
                 .getResponse()
                 .getContentAsString();
         user.setId(1L);
-        System.out.println(objectMapper.writeValueAsString(user));
-        System.out.println(response);
         assertEquals(objectMapper.writeValueAsString(user), response);
     }
 
@@ -77,9 +79,6 @@ public class UserControllerTests {
                 .getResponse()
                 .getContentAsString();
 
-
-        System.out.println(objectMapper.writeValueAsString(user));
-        System.out.println(response2);
         assertEquals(objectMapper.writeValueAsString(user), response2);
     }
 
@@ -95,9 +94,6 @@ public class UserControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        System.out.println(objectMapper.writeValueAsString(user));
-        System.out.println(response);
     }
 
     @SneakyThrows
@@ -111,9 +107,6 @@ public class UserControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        System.out.println(objectMapper.writeValueAsString(user));
-        System.out.println(response);
     }
 
     @SneakyThrows
@@ -127,9 +120,6 @@ public class UserControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        System.out.println(objectMapper.writeValueAsString(user));
-        System.out.println(response);
     }
 
     @SneakyThrows
@@ -143,9 +133,6 @@ public class UserControllerTests {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-        System.out.println(objectMapper.writeValueAsString(user));
-        System.out.println(response);
     }
 
     @SneakyThrows

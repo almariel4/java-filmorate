@@ -17,5 +17,6 @@ public interface FilmStorage {
 
     Film getFilm(Long id);
 
-
+    // Для внутренних тестов
+    void resetId();
 }

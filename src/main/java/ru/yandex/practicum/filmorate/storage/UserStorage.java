@@ -17,4 +17,6 @@ public interface UserStorage {
 
     User getUser(Long id);
 
+    // Для внутренних тестов
+    void resetId();
 }
