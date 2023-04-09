@@ -1,7 +1,7 @@
 # java-filmorate
 Template repository for Filmorate project.
 
-![ER-диаграмма](/schema_db.png)
+![ER-диаграмма](/schema_db_v3.png)
 
 <h2>Примеры запросов:</h2>
 <code>--Users
