@@ -9,7 +9,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -28,5 +30,6 @@ public class User {
     private LocalDate birthday;
     @JsonIgnore
     private Set<Long> friends = new HashSet<>();
+    private Map<Long, Boolean> friends2 = new HashMap<>();
 
 }

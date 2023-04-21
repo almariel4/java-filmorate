@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,12 +25,6 @@ public class InMemoryFilmStorage implements FilmStorage {
         return ++id;
     }
 
-    // Для внутренних тестов
-    @Override
-    public void resetId() {
-        id = 0L;
-    }
-
     @Override
     public Map<Long, Film> getFilms() {
         return films;
@@ -43,6 +39,26 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new FilmNotFoundException("Пользователь с " + filmId + "не найден");
         }
         return films.get(filmId);
+    }
+
+    @Override
+    public List<Genre> getAllGenres() {
+        return null;
+    }
+
+    @Override
+    public Genre getGenre(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Mpa> getAllMpas() {
+        return null;
+    }
+
+    @Override
+    public Mpa getMpa(int id) {
+        return null;
     }
 
     public Film createFilm(Film film) {
