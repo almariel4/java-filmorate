@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,27 +27,23 @@ class UserDbStorageTest {
 
     @Test
     void createUser() {
-        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashSet<>(), new HashMap<>());
+        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashMap<>());
         Optional<User> testUser = Optional.of(userDbStorage.createUser(user));
 
         assertThat(testUser)
                 .isPresent()
                 .hasValueSatisfying(user1 ->
-                        assertThat(user1).hasFieldOrPropertyWithValue("id", 1L))
-                .hasValueSatisfying(user1 ->
-                        assertThat(user1).hasFieldOrPropertyWithValue("email", "user@mail.ru"))
-                .hasValueSatisfying(user1 ->
-                        assertThat(user1).hasFieldOrPropertyWithValue("login", "almariel"))
-                .hasValueSatisfying(user1 ->
-                        assertThat(user1).hasFieldOrPropertyWithValue("name", "Anna"))
-                .hasValueSatisfying(user1 ->
-                        assertThat(user1).hasFieldOrPropertyWithValue("birthday", LocalDate.of(1990, 3, 9))
+                        assertThat(user1).hasFieldOrPropertyWithValue("id", 1L)
+                                .hasFieldOrPropertyWithValue("email", "user@mail.ru")
+                                .hasFieldOrPropertyWithValue("login", "almariel")
+                                .hasFieldOrPropertyWithValue("name", "Anna")
+                                .hasFieldOrPropertyWithValue("birthday", LocalDate.of(1990, 3, 9))
                 );
     }
 
     @Test
     void updateUser() {
-        User user = new User(1L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashSet<>(), new HashMap<>());
+        User user = new User(1L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashMap<>());
         userDbStorage.createUser(user);
         user.setEmail("polina17@mail.ru");
         user.setLogin("Polina17");
@@ -72,8 +67,8 @@ class UserDbStorageTest {
 
     @Test
     void getAllUsers() {
-        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashSet<>(), new HashMap<>());
-        User user2 = new User(2L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashSet<>(), new HashMap<>());
+        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashMap<>());
+        User user2 = new User(2L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashMap<>());
 
         userDbStorage.createUser(user);
         userDbStorage.createUser(user2);
@@ -87,8 +82,8 @@ class UserDbStorageTest {
 
     @Test
     void getUsers() {
-        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashSet<>(), new HashMap<>());
-        User user2 = new User(2L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashSet<>(), new HashMap<>());
+        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashMap<>());
+        User user2 = new User(2L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashMap<>());
 
         userDbStorage.createUser(user);
         userDbStorage.createUser(user2);
@@ -112,7 +107,7 @@ class UserDbStorageTest {
 
     @Test
     void getUser() {
-        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashSet<>(), new HashMap<>());
+        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashMap<>());
         userDbStorage.createUser(user);
 
         Optional<User> userOptional = Optional.ofNullable(userDbStorage.getUser(1L));
@@ -126,8 +121,8 @@ class UserDbStorageTest {
 
     @Test
     void addToFriends() {
-        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashSet<>(), new HashMap<>());
-        User friend = new User(0L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashSet<>(), new HashMap<>());
+        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashMap<>());
+        User friend = new User(0L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashMap<>());
         user = userDbStorage.createUser(user);
         friend = userDbStorage.createUser(friend);
         userService.addToFriends(user.getId(), friend.getId());
@@ -139,8 +134,8 @@ class UserDbStorageTest {
 
     @Test
     void removeFromFriends() {
-        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashSet<>(), new HashMap<>());
-        User friend = new User(0L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23), new HashSet<>(), new HashMap<>());
+        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashMap<>());
+        User friend = new User(0L, "kristina@mail.ru", "kristina21", "Kristina", LocalDate.of(2021, 7, 23),  new HashMap<>());
         userDbStorage.createUser(user);
         userDbStorage.createUser(friend);
         userDbStorage.addToFriends(user.getId(), friend.getId());

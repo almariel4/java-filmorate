@@ -20,10 +20,10 @@ public class UserService {
     }
 
     public void addToFriends(Long userId, Long friendId) {
-        if (!userDbStorage.getUsers().containsKey(userId)) {
+        if (!userDbStorage.checkIfExistsUser(userId)) {
             throw new UserNotFoundException("Пользователь " + userId + " не существует");
         }
-        if (!userDbStorage.getUsers().containsKey(friendId)) {
+        if (!userDbStorage.checkIfExistsUser(friendId)) {
             throw new UserNotFoundException("Пользователь " + friendId + " не существует");
         }
         userDbStorage.addToFriends(userId, friendId);
@@ -39,10 +39,10 @@ public class UserService {
     }
 
     public List<User> getAllCommonFriends(Long userId, Long otherId) {
-        if (!userDbStorage.getUsers().containsKey(userId)) {
+        if (!userDbStorage.checkIfExistsUser(userId)) {
             throw new UserNotFoundException("Пользователь " + userId + " не существует");
         }
-        if (!userDbStorage.getUsers().containsKey(otherId)) {
+        if (!userDbStorage.checkIfExistsUser(userId)) {
             throw new UserNotFoundException("Пользователь " + otherId + " не существует");
         }
 //        User user = userDbStorage.getUsers().get(userId);

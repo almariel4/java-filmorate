@@ -48,7 +48,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        if (!getUsers().containsKey(user.getId())) {
+        if (!checkIfExistsUser(user.getId())) {
             throw new UserNotFoundException("Пользователь с id=" + user.getId() + " отсутствует в списке пользователей");
         }
         jdbcTemplate.update("UPDATE USERS " +
@@ -62,6 +62,13 @@ public class UserDbStorage implements UserStorage {
         String sql = "SELECT  u.USER_ID, u.EMAIL, u.LOGIN, u.NAME, u.BIRTHDAY " +
                 "FROM USERS AS u ";
         return jdbcTemplate.query(sql, this::mapRowToUser);
+    }
+
+    public boolean checkIfExistsUser(Long userId) {
+        String sql = "SELECT COUNT(*) FROM USERS " +
+                "WHERE USER_ID = ?";
+        Long size = jdbcTemplate.queryForObject(sql, Long.class, userId);
+        return size == 1;
     }
 
     @Override
@@ -100,7 +107,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     public void addToFriends(Long userId, Long friendId) {
-        jdbcTemplate.update("INSERT INTO FRIENDS (USER_ID, FRIEND_ID) " +
+        jdbcTemplate.update("MERGE INTO FRIENDS (USER_ID, FRIEND_ID) KEY (USER_ID, FRIEND_ID) " +
                 "VALUES ( ?, ? )", userId, friendId);
     }
 

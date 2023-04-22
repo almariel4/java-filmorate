@@ -159,7 +159,7 @@ class FilmDbStorageTest {
     @Test
     void addLike() {
         Film film = new Film(0L, "Марлоу", "Каждая тайна должна иметь свою звезду на Аллее славы", List.of(new Genre(4, "Триллер")), LocalDate.of(2023, 2, 23), 109, new Mpa(3, "PG-13"), new HashSet<>());
-        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashSet<>(), new HashMap<>());
+        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashMap<>());
         user = userDbStorage.createUser(user);
         film = filmDbStorage.createFilm(film);
         filmDbStorage.addLike(film.getId(), user.getId());
@@ -172,7 +172,7 @@ class FilmDbStorageTest {
     @Test
     void removeLike() {
         Film film = new Film(0L, "Марлоу", "Каждая тайна должна иметь свою звезду на Аллее славы", List.of(new Genre(4, "Триллер")), LocalDate.of(2023, 2, 23), 109, new Mpa(3, "PG-13"), new HashSet<>());
-        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashSet<>(), new HashMap<>());
+        User user = new User(0L, "user@mail.ru", "almariel", "Anna", LocalDate.of(1990, 3, 9), new HashMap<>());
 
         film = filmDbStorage.createFilm(film);
         user = userDbStorage.createUser(user);

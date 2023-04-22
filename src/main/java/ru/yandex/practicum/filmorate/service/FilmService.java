@@ -31,10 +31,10 @@ public class FilmService {
     }
 
     public void removeLike(Long filmId, Long userId) {
-        if (!filmDbStorage.getFilms().containsKey(filmId)) {
+        if (!filmDbStorage.checkIfExistsFilm(filmId)) {
             throw new FilmNotFoundException("Фильм " + filmId + " не существует");
         }
-        if (!userDbStorage.getUsers().containsKey(userId)) {
+        if (!userDbStorage.checkIfExistsUser(userId)) {
             throw new UserNotFoundException("Пользователь " + userId + " не существует");
         }
         filmDbStorage.removeLike(filmId, userId);
