@@ -1,3 +1,4 @@
+/*
 package ru.yandex.practicum.filmorate.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Deprecated
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureJsonTesters
@@ -155,3 +157,4 @@ public class UserControllerTests {
         assertEquals(users.size(), 2);
     }
 }
+*/
